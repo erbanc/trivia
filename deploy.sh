@@ -1,12 +1,13 @@
 #!/bin/bash
-# Script d'optimisation de déploiement pour Trivia 2026
+# Script d'optimisation ULTIME pour Trivia 2026 sur Droplet (1Go RAM)
 
-# 1. Désactiver les attestations Docker qui font freezer le build
+# 1. Correction du blocage "resolving provenance" et forçage BuildKit stable
 export BUILDX_NO_DEFAULT_ATTESTATIONS=1
+export DOCKER_BUILDKIT=1
 
-echo "⚡ Optimisation du Droplet en cours..."
+echo "⚡ Accélération du Droplet..."
 
-# 2. Ajout automatique de SWAP (Essentiel pour compiler sur 1Go de RAM)
+# 2. Ajout de SWAP si manquant (Crucial pour la compilation Java)
 if [ ! -f /swapfile ]; then
     echo "💾 Création de 2Go de mémoire virtuelle (SWAP)..."
     sudo fallocate -l 2G /swapfile
@@ -16,22 +17,18 @@ if [ ! -f /swapfile ]; then
     echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
 fi
 
-# 3. Mise à jour rapide (sans upgrade système lent)
-echo "📦 Mise à jour des dépôts..."
-sudo apt-get update -y
+# 3. Nettoyage préventif pour libérer de l'espace
+echo "🧹 Nettoyage des anciens builds..."
+sudo docker builder prune -f
 
-# 4. Installation Docker si manquant
-if ! command -v docker &> /dev/null; then
-    echo "🐳 Installation de Docker..."
-    curl -fsSL https://get.docker.com -o get-docker.sh
-    sudo sh get-docker.sh
-fi
+# 4. Construction optimisée
+echo "🏗️  Build en cours (Veuillez patienter quelques minutes)..."
+# On désactive explicitement la provenance pour éviter le freeze
+sudo docker compose build --parallel
 
-# 5. Build et Lancement accéléré
-echo "🏗️  Construction et lancement (BuildKit optimisé)..."
-# Utilisation du cache local et désactivation de la provenance pour la vitesse
-sudo docker compose build
+# 5. Lancement
+echo "🎮 Lancement des services..."
 sudo docker compose up -d
 
-echo "✅ DÉPLOIEMENT RÉUSSI !"
-echo "🌐 Jeu accessible sur : http://VOTRE_IP_SERVEUR:8085"
+echo "✅ TERMINÉ !"
+echo "🌐 Si le site ne s'affiche pas, vérifiez le port 8085 sur votre IP."
