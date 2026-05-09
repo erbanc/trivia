@@ -4,7 +4,7 @@ import SockJS from 'sockjs-client'
 import * as Stomp from 'stompjs'
 import confetti from 'canvas-confetti'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Send, Trophy, MessageSquare, Loader2, Sparkles, AlertCircle, Flame, Info, Volume2, VolumeX, LogIn, Sun, Moon, Flag, Zap, Award } from 'lucide-react'
+import { Send, Trophy, MessageSquare, Loader2, Sparkles, Volume2, VolumeX, LogIn, Sun, Moon, Flag, Zap, Award } from 'lucide-react'
 
 type GamePhase = 'QUESTION' | 'REVEAL' | 'INTERMISSION' | 'PODIUM'
 
@@ -52,6 +52,7 @@ function App() {
   const [isMuted, setIsMuted] = useState(localStorage.getItem('trivia_muted') === 'true')
   const [theme, setTheme] = useState(localStorage.getItem('trivia_theme') || 'dark')
   const [gameState, setGameState] = useState<GameState | null>(null)
+  
   const [userAnswer, setUserAnswer] = useState('')
   const [isCorrect, setIsCorrect] = useState(false)
   const [pointsEarned, setPointsEarned] = useState(0)
@@ -100,6 +101,8 @@ function App() {
     localStorage.setItem('trivia_theme', newTheme)
     document.documentElement.setAttribute('data-theme', newTheme)
   }
+
+  const addEmote = (emote: string) => setCurrentChatMessage(prev => prev + emote)
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)
@@ -275,7 +278,7 @@ function App() {
                 <motion.div key="podium" className="podium-container" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                   <div className="podium-title">Vainqueurs</div>
                   <div className="podium-visual">
-                    {leaderboard[1] && <div className="podium-step"><div className="podium-name">{leaderboard[1].username}</div><div className="podium-score">{leaderboard[1].points} pts</div><div className="podium-bar second">2</div></div>}
+                    {leaderboard[1] && <div className="podium-step"><div className="podium-name">{leaderboard[1].username}</div><div className="podium-bar second">2</div></div>}
                     {leaderboard[0] && <div className="podium-step"><div className="podium-name" style={{fontSize: '1.5rem'}}>{leaderboard[0].username}</div><div className="podium-score" style={{fontSize: '1.1rem', fontWeight: 800}}>{leaderboard[0].points} pts</div><div className="podium-bar first">1</div></div>}
                     {leaderboard[2] && <div className="podium-step"><div className="podium-name">{leaderboard[2].username}</div><div className="podium-score">{leaderboard[2].points} pts</div><div className="podium-bar third">3</div></div>}
                   </div>
@@ -322,12 +325,25 @@ function App() {
           <div className="chat-header"><MessageSquare size={20} color="var(--primary)" /> Discussion</div>
           <div className="chat-messages">
             <AnimatePresence initial={false}>
-              {chatMessages.map((msg, i) => (
-                <motion.div key={i} className={`chat-message-group ${msg.username === 'SYSTÈME' ? 'is-system' : msg.username === username ? 'is-me' : 'is-other'}`} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-                  {msg.username !== 'SYSTÈME' && <span className="chat-user-label">{msg.username}</span>}
-                  <div className="chat-bubble">{msg.content}</div>
-                </motion.div>
-              ))}
+              {chatMessages.map((msg, i) => {
+                const isMe = msg.username === username;
+                const isSystem = msg.username === 'SYSTÈME';
+
+                return (
+                  <motion.div 
+                    key={i} 
+                    className={`chat-message-group ${isSystem ? 'is-system' : isMe ? 'is-me' : 'is-other'}`}
+                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                  >
+                    {!isSystem && <span className="chat-user-label">{msg.username}</span>}
+                    <div className="chat-bubble">
+                      <span className="content">{msg.content}</span>
+                    </div>
+                  </motion.div>
+                );
+              })}
             </AnimatePresence>
             <div ref={chatEndRef} />
             <div className={`pixel-cat-container ${isCatAwake ? 'is-awake' : ''}`}>
