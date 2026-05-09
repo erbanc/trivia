@@ -1,0 +1,22 @@
+[
+  {"question": "Quel est le nom de l'hymne national français ?", "reponses": ["La Marseillaise", "Marseillaise"], "categorie": "Culture"},
+  {"question": "Qui a peint 'La Jeune Fille à la perle' ?", "reponses": ["Johannes Vermeer", "Vermeer"], "categorie": "Art"},
+  {"question": "Quel est le plus grand volcan du système solaire, situé sur Mars ?", "reponses": ["Olympus Mons", "Le mont Olympe"], "categorie": "Sciences"},
+  {"question": "Quelle est la capitale de la Turquie ?", "reponses": ["Ankara"], "categorie": "Géographie"},
+  {"question": "Dans quel film d'animation suit-on les aventures de Woody et Buzz l'Éclair ?", "reponses": ["Toy Story"], "categorie": "Cinéma"},
+  {"question": "Qui était le dieu romain de la mer ?", "reponses": ["Neptune"], "categorie": "Mythologie"},
+  {"question": "Quel animal a le cri appelé le barrissement ?", "reponses": ["Le cerf", "L'éléphant", "Cerf", "Éléphant", "Elephant"], "categorie": "Nature"},
+  {"question": "Combien de cases compte un échiquier ?", "reponses": ["64", "soixante-quatre"], "categorie": "Culture Pop"},
+  {"question": "Quelle est la capitale de la Pologne ?", "reponses": ["Varsovie"], "categorie": "Géographie"},
+  {"question": "Quel inventeur a donné son nom à la célèbre marque de voitures électriques ?", "reponses": ["Nikola Tesla", "Tesla"], "categorie": "Inventions"},
+  {"question": "Qui a écrit 'L'Écume des jours' ?", "reponses": ["Guy de Maupassant", "Maupassant", "Boris Vian", "Vian"], "categorie": "Littérature"},
+  {"question": "Quel est le plus long fleuve de France ?", "reponses": ["La Loire", "Loire"], "categorie": "Géographie"},
+  {"question": "Quel est le symbole chimique du potassium ?", "reponses": ["K"], "categorie": "Sciences"},
+  {"question": "Dans quel pays est né le tango ?", "reponses": ["L'Argentine", "Argentine"], "categorie": "Culture"},
+  {"question": "Comment s'appelle le vaisseau de Han Solo dans Star Wars ?", "reponses": ["Le Faucon Millenium", "Faucon Millenium"], "categorie": "Cinéma"},
+  {"question": "Quelle mer borde la ville de Marseille ?", "reponses": ["La mer Méditerranée", "Méditerranée"], "categorie": "Géographie"},
+  {"question": "Qui a peint 'Les Nymphéas' ?", "reponses": ["Claude Monet", "Monet"], "categorie": "Art"},
+  {"question": "Dans quelle ville se déroule le festival des Vieilles Charrues ?", "reponses": ["Carhaix", "Carhaix-Plouguer"], "categorie": "Culture"},
+  {"question": "Quel fruit est associé au dieu grec Dionysos ?", "reponses": ["Le raisin", "Raisin"], "categorie": "Mythologie"},
+  {"question": "Combien de joueurs composent une équipe de baseball sur le terrain ?", "reponses": ["9", "neuf"], "categorie": "Sport"}
+]

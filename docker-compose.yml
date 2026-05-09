@@ -1,0 +1,41 @@
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: trivia-db
+    environment:
+      POSTGRES_DB: trivia
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    volumes:
+      - trivia-db-data:/var/lib/postgresql/data
+    restart: always
+
+  redis:
+    image: redis:7-alpine
+    container_name: trivia-redis
+    restart: always
+
+  backend:
+    build: ./backend
+    container_name: trivia-backend
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/trivia
+      - SPRING_DATASOURCE_USERNAME=user
+      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_DATA_REDIS_HOST=redis
+    depends_on:
+      - db
+      - redis
+    restart: always
+
+  frontend:
+    build: ./frontend
+    container_name: trivia-frontend
+    ports:
+      - "8085:80"
+    depends_on:
+      - backend
+    restart: always
+
+volumes:
+  trivia-db-data:
