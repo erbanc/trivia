@@ -1,33 +1,37 @@
 #!/bin/bash
-# Script d'installation automatique pour Trivia 2026 sur un VPS Ubuntu/Debian
+# Script d'optimisation de déploiement pour Trivia 2026
 
-# Correction pour éviter le blocage "resolving provenance" sur certains serveurs
+# 1. Désactiver les attestations Docker qui font freezer le build
 export BUILDX_NO_DEFAULT_ATTESTATIONS=1
 
-echo "🚀 Début de l'installation de Trivia..."
+echo "⚡ Optimisation du Droplet en cours..."
 
-# 1. Mise à jour du système
-echo "📦 Mise à jour du système..."
-sudo apt-get update && sudo apt-get upgrade -y
+# 2. Ajout automatique de SWAP (Essentiel pour compiler sur 1Go de RAM)
+if [ ! -f /swapfile ]; then
+    echo "💾 Création de 2Go de mémoire virtuelle (SWAP)..."
+    sudo fallocate -l 2G /swapfile
+    sudo chmod 600 /swapfile
+    sudo mkswap /swapfile
+    sudo swapon /swapfile
+    echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+fi
 
-# 2. Installation de Docker et Docker Compose
-if ! command -v docker &> /dev/null
-then
+# 3. Mise à jour rapide (sans upgrade système lent)
+echo "📦 Mise à jour des dépôts..."
+sudo apt-get update -y
+
+# 4. Installation Docker si manquant
+if ! command -v docker &> /dev/null; then
     echo "🐳 Installation de Docker..."
     curl -fsSL https://get.docker.com -o get-docker.sh
     sudo sh get-docker.sh
-    sudo usermod -aG docker $USER
-    rm get-docker.sh
-else
-    echo "✅ Docker est déjà installé."
 fi
 
-# 3. Lancement du jeu
-echo "🎮 Lancement des conteneurs Trivia..."
-# Utilisation de --provenance=false pour éviter le bug de métadonnées
-sudo docker compose build --no-cache --pull
+# 5. Build et Lancement accéléré
+echo "🏗️  Construction et lancement (BuildKit optimisé)..."
+# Utilisation du cache local et désactivation de la provenance pour la vitesse
+sudo docker compose build
 sudo docker compose up -d
 
-echo "✅ DÉPLOIEMENT TERMINÉ !"
-echo "🌐 Votre jeu est accessible sur le port 8085 de ce serveur."
-echo "👉 http://VOTRE_ADRESSE_IP:8085"
+echo "✅ DÉPLOIEMENT RÉUSSI !"
+echo "🌐 Jeu accessible sur : http://VOTRE_IP_SERVEUR:8085"

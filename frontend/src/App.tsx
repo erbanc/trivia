@@ -52,7 +52,6 @@ function App() {
   const [isMuted, setIsMuted] = useState(localStorage.getItem('trivia_muted') === 'true')
   const [theme, setTheme] = useState(localStorage.getItem('trivia_theme') || 'dark')
   const [gameState, setGameState] = useState<GameState | null>(null)
-  
   const [userAnswer, setUserAnswer] = useState('')
   const [isCorrect, setIsCorrect] = useState(false)
   const [pointsEarned, setPointsEarned] = useState(0)
@@ -278,10 +277,11 @@ function App() {
                 <motion.div key="podium" className="podium-container" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                   <div className="podium-title">Vainqueurs</div>
                   <div className="podium-visual">
-                    {leaderboard[1] && <div className="podium-step"><div className="podium-name">{leaderboard[1].username}</div><div className="podium-bar second">2</div></div>}
+                    {leaderboard[1] && <div className="podium-step"><div className="podium-name">{leaderboard[1].username}</div><div className="podium-score">{leaderboard[1].points} pts</div><div className="podium-bar second">2</div></div>}
                     {leaderboard[0] && <div className="podium-step"><div className="podium-name" style={{fontSize: '1.5rem'}}>{leaderboard[0].username}</div><div className="podium-score" style={{fontSize: '1.1rem', fontWeight: 800}}>{leaderboard[0].points} pts</div><div className="podium-bar first">1</div></div>}
                     {leaderboard[2] && <div className="podium-step"><div className="podium-name">{leaderboard[2].username}</div><div className="podium-score">{leaderboard[2].points} pts</div><div className="podium-bar third">3</div></div>}
                   </div>
+                  <p style={{ marginTop: '2rem', opacity: 0.6 }}>La manche suivante commence bientôt...</p>
                 </motion.div>
               ) : (waitingForNextQuestion || phase === 'INTERMISSION') ? (
                 <motion.div key="transition" className="preparation-view"><Loader2 className="spinner" size={40} color="#8b5cf6" /><div className="prep-text">Prochaine question...</div></motion.div>
