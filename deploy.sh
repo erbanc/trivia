@@ -1,6 +1,9 @@
 #!/bin/bash
 # Script d'installation automatique pour Trivia 2026 sur un VPS Ubuntu/Debian
 
+# Correction pour éviter le blocage "resolving provenance" sur certains serveurs
+export BUILDX_NO_DEFAULT_ATTESTATIONS=1
+
 echo "🚀 Début de l'installation de Trivia..."
 
 # 1. Mise à jour du système
@@ -21,7 +24,9 @@ fi
 
 # 3. Lancement du jeu
 echo "🎮 Lancement des conteneurs Trivia..."
-sudo docker compose up -d --build
+# Utilisation de --provenance=false pour éviter le bug de métadonnées
+sudo docker compose build --no-cache --pull
+sudo docker compose up -d
 
 echo "✅ DÉPLOIEMENT TERMINÉ !"
 echo "🌐 Votre jeu est accessible sur le port 8085 de ce serveur."
